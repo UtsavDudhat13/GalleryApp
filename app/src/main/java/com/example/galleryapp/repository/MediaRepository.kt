@@ -101,7 +101,14 @@ class MediaRepository @Inject constructor(private val context: Context) {
 
     suspend fun groupMediaByFolder(): List<FolderItem> {
         val media = getAllCachedMedia()
-        return media.groupBy { it.folderPath }.map { (folderPath, mediaList) ->
+
+        val allFolderItem = FolderItem(
+            folderName = "All Photos",
+            folderPath = "all_photos",
+            mediaItems = media
+        )
+
+        return listOf(allFolderItem) + media.groupBy { it.folderPath }.map { (folderPath, mediaList) ->
             FolderItem(
                 folderName = File(folderPath).name,
                 folderPath = folderPath,

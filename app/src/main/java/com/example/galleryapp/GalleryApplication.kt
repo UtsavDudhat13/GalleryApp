@@ -7,9 +7,13 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltAndroidApp
 class GalleryApplication : Application() {
+
+    @Inject
+    lateinit var mediaRepository: MediaRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -18,7 +22,7 @@ class GalleryApplication : Application() {
 
     private fun preloadMedia() {
         CoroutineScope(Dispatchers.IO).launch {
-            val media = MediaRepository(applicationContext).getAllMedia()
+            val media = mediaRepository.getAllMedia()
             MediaCache.setCachedMedia(media)
         }
 
