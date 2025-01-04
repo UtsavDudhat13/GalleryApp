@@ -1,12 +1,15 @@
 package com.example.galleryapp.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.galleryapp.activity.FolderMediaActivity
 import com.example.galleryapp.adapters.FolderAdapter
 import com.example.galleryapp.databinding.FragmentFolderBinding
 import com.example.galleryapp.viewmodels.MediaViewModel
@@ -30,7 +33,9 @@ class FolderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = FolderAdapter(emptyList()) { folderItem ->
-
+            val intent = Intent(context, FolderMediaActivity::class.java)
+            intent.putExtra("folderItem", folderItem)
+            startActivity(intent)
         }
 
         binding.rvFolder.layoutManager = GridLayoutManager(context, 3)

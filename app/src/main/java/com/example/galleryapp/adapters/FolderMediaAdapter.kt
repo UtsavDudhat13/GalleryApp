@@ -1,0 +1,67 @@
+package com.example.galleryapp.adapters
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.galleryapp.R
+import com.example.galleryapp.databinding.ItemThumbnailBinding
+import com.example.galleryapp.model.MediaItem
+import com.example.galleryapp.model.MediaType
+import com.example.galleryapp.utils.Utils
+
+class FolderMediaAdapter(
+    private var mediaList: List<MediaItem>,
+    private val onClick: (MediaItem) -> Unit
+) : RecyclerView.Adapter<FolderMediaAdapter.ItemViewHolder>() {
+
+    class ItemViewHolder(val binding: ItemThumbnailBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        val binding = ItemThumbnailBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ItemViewHolder(binding)
+    }
+
+    override fun getItemCount(): Int {
+        return mediaList.size
+    }
+
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        val mediaItem = mediaList[position]
+        holder.binding.apply {
+            when (mediaItem.type) {
+                MediaType.IMAGE -> {
+                    Glide.with(imageView)
+                        .load(mediaItem.uri)
+                        .thumbnail()
+                        .encodeQuality(60)
+                        .placeholder(R.color.grey)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imageView)
+                    tvVideoDuration.visibility = View.GONE
+                }
+
+                MediaType.VIDEO -> {
+                    Glide.with(imageView)
+                        .load(mediaItem.uri)
+                        .thumbnail()
+                        .encodeQuality(60)
+                        .placeholder(R.color.grey)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imageView)
+                    tvVideoDuration.visibility = View.VISIBLE
+                    tvVideoDuration.text = Utils.formatDuration(mediaItem.duration)
+                }
+
+                MediaType.UNKNOWN -> {
+                    imageView.setBackgroundColor(imageView.context.getColor(R.color.grey))
+                    tvVideoDuration.visibility = View.GONE
+                }
+            }
+            root.setOnClickListener { onClick(mediaItem) }
+        }
+    }
+
+}
