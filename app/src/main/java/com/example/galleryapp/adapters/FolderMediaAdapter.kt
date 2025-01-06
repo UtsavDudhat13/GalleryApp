@@ -31,34 +31,23 @@ class FolderMediaAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val mediaItem = mediaList[position]
         holder.binding.apply {
+            Glide.with(imageView)
+                .load(mediaItem.uri)
+                .thumbnail()
+                .encodeQuality(60)
+                .placeholder(R.color.grey)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView)
             when (mediaItem.type) {
                 MediaType.IMAGE -> {
-                    Glide.with(imageView)
-                        .load(mediaItem.uri)
-                        .thumbnail()
-                        .encodeQuality(60)
-                        .placeholder(R.color.grey)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(imageView)
                     tvVideoDuration.visibility = View.GONE
                 }
 
                 MediaType.VIDEO -> {
-                    Glide.with(imageView)
-                        .load(mediaItem.uri)
-                        .thumbnail()
-                        .encodeQuality(60)
-                        .placeholder(R.color.grey)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(imageView)
                     tvVideoDuration.visibility = View.VISIBLE
                     tvVideoDuration.text = Utils.formatDuration(mediaItem.duration)
                 }
 
-                MediaType.UNKNOWN -> {
-                    imageView.setBackgroundColor(imageView.context.getColor(R.color.grey))
-                    tvVideoDuration.visibility = View.GONE
-                }
             }
             root.setOnClickListener { onClick(mediaItem) }
         }

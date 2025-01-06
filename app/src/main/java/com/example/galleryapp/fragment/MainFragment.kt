@@ -1,13 +1,15 @@
 package com.example.galleryapp.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import com.example.galleryapp.activity.MediaViewerActivity
 import com.example.galleryapp.adapters.MediaAdapter
 import com.example.galleryapp.adapters.MediaAdapter.Companion.VIEW_TYPE_HEADER
 import com.example.galleryapp.adapters.MediaAdapter.Companion.VIEW_TYPE_MEDIA
@@ -26,16 +28,14 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(inflater,container,false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = MediaAdapter(emptyList()) { item ->
-
-        }
+        val adapter = MediaAdapter(emptyList())
 
         binding.rvMain.layoutManager = GridLayoutManager(context, 4).apply {
             spanSizeLookup = object : SpanSizeLookup() {

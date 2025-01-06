@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MediaItem(
     val id: Long,
+    val name: String,
     val uri: Uri,
     val date: Long,
     val duration: Long = 0L,

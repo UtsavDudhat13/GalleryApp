@@ -24,6 +24,7 @@ class MediaRepository @Inject constructor(private val context: Context) {
 
         val projection = arrayOf(
             MediaStore.Files.FileColumns._ID,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
             MediaStore.Files.FileColumns.DATE_ADDED,
             MediaStore.Files.FileColumns.MEDIA_TYPE,
             MediaStore.Files.FileColumns.DURATION,
@@ -47,6 +48,7 @@ class MediaRepository @Inject constructor(private val context: Context) {
         )?.use { cursor ->
 
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+            val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)
             val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED)
             val typeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DURATION)
@@ -54,6 +56,7 @@ class MediaRepository @Inject constructor(private val context: Context) {
 
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
+                val name = cursor.getString(nameColumn)
                 val date = cursor.getLong(dateColumn)
                 val type = cursor.getInt(typeColumn)
                 val filePath = cursor.getString(dataColumn)
@@ -71,6 +74,7 @@ class MediaRepository @Inject constructor(private val context: Context) {
                 mediaList.add(
                     MediaItem(
                         id,
+                        name,
                         uri,
                         date,
                         duration,

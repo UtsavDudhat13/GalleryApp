@@ -1,6 +1,7 @@
 package com.example.galleryapp.adapters
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.galleryapp.R
+import com.example.galleryapp.activity.MediaViewerActivity
 import com.example.galleryapp.databinding.ItemDateHeaderBinding
 import com.example.galleryapp.databinding.ItemThumbnailBinding
 import com.example.galleryapp.model.MediaItem
@@ -16,8 +18,7 @@ import com.example.galleryapp.utils.Utils
 
 
 class MediaAdapter(
-    private var mediaList: List<MediaDisplayItem>,
-    private val onClick: (MediaItem) -> Unit
+    var mediaList: List<MediaDisplayItem>,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -46,7 +47,7 @@ class MediaAdapter(
         if (holder is DateViewHolder) {
             holder.bind(item.headerText)
         } else if (holder is MediaViewHolder) {
-            item.mediaItem?.let { holder.bind(it, onClick) }
+            item.mediaItem?.let { holder.bind(it, mediaList, position) }
         }
     }
 
@@ -63,50 +64,44 @@ class MediaAdapter(
 
     class MediaViewHolder(private val binding: ItemThumbnailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(mediaItem: MediaItem?, onClick: (MediaItem) -> Unit) {
+        fun bind(mediaItem: MediaItem?, mediaList: List<MediaDisplayItem>, position: Int) {
             if (mediaItem == null) return
 
             binding.apply {
+                Glide.with(imageView)
+                    .load(mediaItem.uri)
+                    .thumbnail()
+                    .encodeQuality(60)
+                    .placeholder(R.color.grey)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imageView)
+
                 when (mediaItem.type) {
                     MediaType.IMAGE -> {
-                        Glide.with(imageView)
-                            .load(mediaItem.uri)
-                            .thumbnail()
-                            .encodeQuality(60)
-                            .placeholder(R.color.grey)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(imageView)
                         tvVideoDuration.visibility = View.GONE
                     }
-
                     MediaType.VIDEO -> {
-                        Glide.with(imageView)
-                            .load(mediaItem.uri)
-                            .thumbnail()
-                            .encodeQuality(60)
-                            .placeholder(R.color.grey)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(imageView)
                         tvVideoDuration.visibility = View.VISIBLE
                         tvVideoDuration.text = Utils.formatDuration(mediaItem.duration)
                     }
-
-                    MediaType.UNKNOWN -> {
-                        imageView.setBackgroundColor(imageView.context.getColor(R.color.grey))
-                        tvVideoDuration.visibility = View.GONE
-                    }
                 }
             }
-            itemView.setOnClickListener { onClick(mediaItem) }
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, MediaViewerActivity::class.java)
+                val mediaItems = mediaList.filter { !it.isHeader }.map { it.mediaItem!! }
+                intent.putParcelableArrayListExtra("media_list", ArrayList(mediaItems))
+                intent.putExtra(
+                    "initial_position",
+                    position - mediaList.subList(0, position).count { it.isHeader })
+                itemView.context.startActivity(intent)
+            }
         }
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newList: List<MediaDisplayItem>) {
         mediaList = newList
         notifyDataSetChanged()
     }
-
 
 }
