@@ -18,4 +18,5 @@ object AppModule {
     fun provideMediaRepository(@ApplicationContext context: Context): MediaRepository {
         return MediaRepository(context)
     }
+
 }

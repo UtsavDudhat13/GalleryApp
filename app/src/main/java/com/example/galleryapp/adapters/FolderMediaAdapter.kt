@@ -1,5 +1,6 @@
 package com.example.galleryapp.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.galleryapp.R
+import com.example.galleryapp.activity.MediaViewerActivity
 import com.example.galleryapp.databinding.ItemThumbnailBinding
 import com.example.galleryapp.model.MediaItem
 import com.example.galleryapp.model.MediaType
@@ -38,18 +40,24 @@ class FolderMediaAdapter(
                 .placeholder(R.color.grey)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView)
+
             when (mediaItem.type) {
                 MediaType.IMAGE -> {
                     tvVideoDuration.visibility = View.GONE
                 }
-
                 MediaType.VIDEO -> {
                     tvVideoDuration.visibility = View.VISIBLE
                     tvVideoDuration.text = Utils.formatDuration(mediaItem.duration)
                 }
-
             }
-            root.setOnClickListener { onClick(mediaItem) }
+            root.setOnClickListener {
+                val intent = Intent(holder.itemView.context, MediaViewerActivity::class.java)
+                intent.putParcelableArrayListExtra("media_list", ArrayList(mediaList))
+                intent.putExtra(
+                    "initial_position",
+                    position)
+                holder.itemView.context.startActivity(intent)
+            }
         }
     }
 

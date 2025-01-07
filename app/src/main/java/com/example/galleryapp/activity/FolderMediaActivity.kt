@@ -27,6 +27,9 @@ class FolderMediaActivity : AppCompatActivity() {
 
         folderItem = intent.getParcelableExtra<FolderItem>("folderItem") as FolderItem
 
+        binding.materialToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         binding.materialToolbar.setTitle(folderItem.folderName)
 
         val adapter = FolderMediaAdapter(folderItem.mediaItems) { mediaItem ->

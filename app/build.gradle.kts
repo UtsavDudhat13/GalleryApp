@@ -57,6 +57,8 @@ dependencies {
 
     implementation(libs.androidx.fragment.ktx)
 
+    implementation("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -1,6 +1,10 @@
 package com.example.galleryapp.utils
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import android.text.format.Formatter.formatFileSize
 
 object Utils {
 
@@ -16,5 +20,11 @@ object Utils {
         } else {
             String.format("%02d:%02d", minutes, seconds)
         }
+    }
+
+    @SuppressLint("Recycle")
+    fun getMediaSize(context: Context, contentResolver: ContentResolver, uri: Uri): String {
+        val fileSizeBytes = contentResolver.openFileDescriptor(uri, "r")?.statSize ?: 0
+        return formatFileSize(context,fileSizeBytes)
     }
 }

@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:navigationIcon="@drawable/arrow_back"
+        app:navigationIconTint="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/app_name" />
 

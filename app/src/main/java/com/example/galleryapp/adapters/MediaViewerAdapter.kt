@@ -3,9 +3,7 @@ package com.example.galleryapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.galleryapp.R
+import com.davemorrissey.labs.subscaleview.ImageSource
 import com.example.galleryapp.databinding.ItemImageBinding
 import com.example.galleryapp.databinding.ItemVideoBinding
 import com.example.galleryapp.model.MediaItem
@@ -44,21 +42,17 @@ class MediaViewerAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = mediaList[position]
         if (holder is ImageViewHolder) {
-            holder.bind(item)
+            holder.bind(item, onToolbarToggle)
         } else if (holder is VideoViewHolder) {
             holder.bind(item)
         }
-        holder.itemView.setOnClickListener { onToolbarToggle() }
     }
 
     class ImageViewHolder(private val binding: ItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MediaItem) {
-            Glide.with(binding.mediaImage)
-                .load(item.uri)
-                .placeholder(R.color.grey)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(binding.mediaImage)
+        fun bind(item: MediaItem, onToolbarToggle: () -> Unit) {
+            binding.mediaImage.setImage(ImageSource.uri(item.uri))
+            binding.mediaImage.setOnClickListener{onToolbarToggle()}
         }
     }
 

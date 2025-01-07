@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title=" "
+        android:icon="@drawable/ic_more"
+        app:showAsAction="always">
+
+         <menu>
+             <item android:icon="@drawable/ic_share"
+                 android:title="Share"
+                 app:showAsAction="never"
+                 android:id="@+id/menu_share"/>
+
+             <item android:icon="@drawable/ic_delete"
+                 android:title="Delete"
+                 app:showAsAction="never"
+                 android:id="@+id/menu_delete"/>
+
+             <item android:icon="@drawable/ic_info"
+                 android:title="Info"
+                 app:showAsAction="never"
+                 android:id="@+id/menu_info"/>
+         </menu>
+
+    </item>
+
+
+</menu>

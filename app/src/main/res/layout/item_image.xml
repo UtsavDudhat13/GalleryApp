@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.galleryapp.utils.ZoomableImageView
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/mediaImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
